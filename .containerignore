@@ -1,0 +1,6 @@
+.*
+Containerfile
+*.md
+run.sh
+deploy/
+/_*

@@ -1,0 +1,31 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: kubernetes-activity-scaler
+  labels:
+    app.kubernetes.io/name: kubernetes-activity-scaler
+rules:
+# Allow reading of workloads
+- apiGroups: ["apps"]
+  resources: ["deployments", "statefulsets"]
+  verbs: ["get"]
+# Allow scaling of workloads
+- apiGroups: ["apps"]
+  resources: ["deployments/scale", "statefulsets/scale"]
+  verbs: ["update","patch"]
+  # # Optionally limit to specific resource(s)
+  # resourceNames: [""]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: kubernetes-activity-scaler
+  labels:
+    app.kubernetes.io/name: kubernetes-activity-scaler
+roleRef:
+  kind: Role
+  name: kubernetes-activity-scaler
+  apiGroup: rbac.authorization.k8s.io
+subjects:
+- kind: ServiceAccount
+  name: kubernetes-activity-scaler
