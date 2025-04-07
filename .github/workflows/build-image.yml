@@ -1,0 +1,17 @@
+name: Build Docker image
+on:
+  push:
+    branches: ["main","feature/github-action-pipeline-build"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build and tag image
+        run: |
+          COMMIT_SHA=$(echo $GITHUB_SHA | cut -c1-7)
+          docker build -t ${{ github.repository }}:$COMMIT_SHA -f Containerfile .
